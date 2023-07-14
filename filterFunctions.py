@@ -66,3 +66,9 @@ def geteffepsilon(ep, u): # finds effective permittivity, Hong p. 78 (4.4)
 
 def findlambda(cutoff, effepsilon): # find guided wavelength, Hong p. 77 (4.6b)
     return 300 / ((cutoff) * np.sqrt(effepsilon)) # guided wavelength (mm)
+
+def getNewLengthL(lamd, cutoff, l, z0l): # finds length, Hong p. 114 (5.2) 
+    return (lamd / (2 * np.pi)) * np.arcsin((cutoff * l) / z0l) 
+
+def getNewLengthC(lamd, cutoff, c, z0c): # finds length, Hong p. 114 (5.2)
+    return (lamd / (2 * np.pi)) * np.arcsin(cutoff * c * z0c)
