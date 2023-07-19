@@ -2,6 +2,7 @@
 
 # imports
 import numpy as np
+from pyaedt import Hfss
 
 # Functions for finding g values
 def findgs(order, ripple, filtertype):
@@ -72,3 +73,52 @@ def getNewLengthL(lamd, cutoff, l, z0l): # finds length, Hong p. 114 (5.2)
 
 def getNewLengthC(lamd, cutoff, c, z0c): # finds length, Hong p. 114 (5.2)
     return (lamd / (2 * np.pi)) * np.arcsin(cutoff * c * z0c)
+
+# Functions for HFSS
+def generateLines(hfss, lengths, widths, subheight, subwidth): # Generates high- and low-impedance lines in HFSS
+    order = len(lengths) # order of filter
+    lengthTracker = 0 # keeps track of length of filter
+    if order < 3 or order > 9: # order must be between 3 and 9 inclusive
+        print("Error: Order must be between 3 and 9 inclusive")
+        return
+
+    L1 = hfss.modeler.create_rectangle('XY', [0, subwidth/2 - widths[0]/2, subheight], [lengths[0], widths[0]], name='L1') # creates first low-impedance line
+    L1.color = ('255', '0', '0')
+    lengthTracker += lengths[0]
+
+    C2 = hfss.modeler.create_rectangle('XY', [lengthTracker, subwidth/2 - widths[1]/2, subheight], [lengths[1], widths[1]], name='C2') # creates first high-impedance line
+    C2.color = ('255', '0', '0')
+    lengthTracker += lengths[1]
+
+    L3 = hfss.modeler.create_rectangle('XY', [lengthTracker, subwidth/2 - widths[0]/2, subheight], [lengths[2], widths[0]], name='L3') # creates second low-impedance line
+    L3.color = ('255', '0', '0')
+    lengthTracker += lengths[2]
+
+    if order >= 4:
+        C4 = hfss.modeler.create_rectangle('XY', [lengthTracker, subwidth/2 - widths[1]/2, subheight], [lengths[3], widths[1]], name='C4') # creates second high-impedance line
+        C4.color = ('255', '0', '0')
+        lengthTracker += lengths[3]
+
+    if order >= 5:
+        L5 = hfss.modeler.create_rectangle('XY', [lengthTracker, subwidth/2 - widths[0]/2, subheight], [lengths[4], widths[0]], name='L5') # creates third low-impedance line
+        L5.color = ('255', '0', '0')
+        lengthTracker += lengths[4]
+
+    if order >= 6:
+        C6 = hfss.modeler.create_rectangle('XY', [lengthTracker, subwidth/2 - widths[1]/2, subheight], [lengths[5], widths[1]], name='C6') # creates third high-impedance line
+        C6.color = ('255', '0', '0')
+        lengthTracker += lengths[5]
+    
+    if order >= 7:
+        L7 = hfss.modeler.create_rectangle('XY', [lengthTracker, subwidth/2 - widths[0]/2, subheight], [lengths[6], widths[0]], name='L7') # creates fourth low-impedance line
+        L7.color = ('255', '0', '0')
+        lengthTracker += lengths[6]
+
+    if order >= 8:
+        C8 = hfss.modeler.create_rectangle('XY', [lengthTracker, subwidth/2 - widths[1]/2, subheight], [lengths[7], widths[1]], name='C8') # creates fourth high-impedance line
+        C8.color = ('255', '0', '0')
+        lengthTracker += lengths[7]
+    
+    if order == 9:
+        L9 = hfss.modeler.create_rectangle('XY', [lengthTracker, subwidth/2 - widths[0]/2, subheight], [lengths[8], widths[0]], name='L9') # creates fifth low-impedance line
+        L9.color = ('255', '0', '0')
