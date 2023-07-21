@@ -74,6 +74,15 @@ def getNewLengthL(lamd, cutoff, l, z0l): # finds length, Hong p. 114 (5.2)
 def getNewLengthC(lamd, cutoff, c, z0c): # finds length, Hong p. 114 (5.2)
     return (lamd / (2 * np.pi)) * np.arcsin(cutoff * c * z0c)
 
+def findElectricalLengthL(L, z0l, z0): # finds electrical length, Pozar p.424 (8.86a)
+    return (L * z0) / z0l
+
+def findElectricalLengthC(C, z0c, z0): # finds electrical length, Pozar p.424 (8.86b)
+    return (C * z0c) / z0
+
+def getLengthFromElectricalLength(electricalLength, lamd): # finds length from electrical length
+    return (electricalLength * lamd) / (2 * np.pi)
+
 # Functions for HFSS
 def generateLines(hfss, lengths, widths, subheight, subwidth): # Generates high- and low-impedance lines in HFSS
     order = len(lengths) # order of filter
