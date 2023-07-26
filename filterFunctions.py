@@ -91,7 +91,11 @@ def generateLines(hfss, lengths, widths, subheight, subwidth): # Generates high-
         print("Error: Order must be between 3 and 9 inclusive")
         return
 
-    L1 = hfss.modeler.create_rectangle('XY', [0, subwidth/2 - widths[0]/2, subheight], [lengths[0], widths[0]], name='L1') # creates first low-impedance line
+    lumpedPort1 = hfss.modeler.create_rectangle('XY', [0, subwidth/2 - widths[2]/2, subheight], [widths[2], widths[2]], name='LumpedRegion1') # creates first lumped-port region
+    lumpedPort1.color = ('0', '255', '0')
+    lengthTracker += widths[2]
+
+    L1 = hfss.modeler.create_rectangle('XY', [lengthTracker, subwidth/2 - widths[0]/2, subheight], [lengths[0], widths[0]], name='L1') # creates first low-impedance line
     L1.color = ('255', '0', '0')
     lengthTracker += lengths[0]
 
@@ -131,3 +135,8 @@ def generateLines(hfss, lengths, widths, subheight, subwidth): # Generates high-
     if order == 9:
         L9 = hfss.modeler.create_rectangle('XY', [lengthTracker, subwidth/2 - widths[0]/2, subheight], [lengths[8], widths[0]], name='L9') # creates fifth low-impedance line
         L9.color = ('255', '0', '0')
+        lengthTracker += lengths[8]
+    
+    lumpedPort2 = hfss.modeler.create_rectangle('XY', [lengthTracker, subwidth/2 - widths[2]/2, subheight], [widths[2], widths[2]], name='LumpedRegion2') # creates second lumped-port region
+    lumpedPort2.color = ('0', '255', '0')
+    lengthTracker += widths[2]
